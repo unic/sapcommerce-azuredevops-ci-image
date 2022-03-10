@@ -13,6 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sapcommerce-azuredevops-ci-image:$(date +%s)
+      - uses: actions/checkout@v2
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          ignore: DL3008
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build the Docker image
+        run: |
+          TS=$(date +%Y%m%d%H%M%S)
+          docker build . --file Dockerfile --tag lennartjuetteunic/sapcommerce-azuredevops-ci-image:latest
+          docker tag lennartjuetteunic/sapcommerce-azuredevops-ci-image:latest lennartjuetteunic/sapcommerce-azuredevops-ci-image:$TS
+          docker push lennartjuetteunic/sapcommerce-azuredevops-ci-image:$TS
+          docker push lennartjuetteunic/sapcommerce-azuredevops-ci-image:latest
+
