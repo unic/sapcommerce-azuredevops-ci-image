@@ -39,6 +39,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     docker-ce-cli \
   && rm -rf /var/lib/apt/lists/*
 
+## Basic tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    unzip \
+  && rm -rf /var/lib/apt/lists/*
+
 ENV TARGETARCH=linux-x64
 ENV JAVA_HOME_11_X64=$JAVA_HOME
 WORKDIR /azp
