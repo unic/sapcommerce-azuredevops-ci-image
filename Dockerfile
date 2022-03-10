@@ -1,6 +1,8 @@
-FROM lennartjuetteunic/sapcommerce-build-image:latest
+FROM lennartjuetteunic/sapcommerce-build-image:20220310140707
 
 ENV DEBIAN_FRONTEND=noninteractive
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 ## Install Azure CLI
