@@ -1,4 +1,4 @@
-FROM lennartjuetteunic/sapcommerce-build-image:20220310140707
+FROM lennartjuetteunic/sapcommerce-build-image:11-20221005132151
 
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
