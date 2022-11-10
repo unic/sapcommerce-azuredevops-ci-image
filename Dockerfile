@@ -40,20 +40,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     docker-ce-cli \
   && rm -rf /var/lib/apt/lists/*
 
-## Install additional JVM 17
-ENV JAVA_HOME_17_X64=/opt/sapmachine-17
-RUN curl -Lo sapmachine17.tar.gz https://github.com/SAP/SapMachine/releases/download/sapmachine-17.0.2/sapmachine-jre-17.0.2_linux-x64_bin.tar.gz \
-  && mkdir $JAVA_HOME_17_X64 \
-  && tar -C $JAVA_HOME_17_X64 --strip-components 1 -zxvf sapmachine17.tar.gz \
-  && rm sapmachine17.tar.gz
-
 ## Install basic tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
   && rm -rf /var/lib/apt/lists/*
 
 ENV TARGETARCH=linux-x64
-ENV JAVA_HOME_11_X64=$JAVA_HOME
+ENV JAVA_HOME_17_X64=$JAVA_HOME
 WORKDIR /azp
 
 COPY ./start.sh .

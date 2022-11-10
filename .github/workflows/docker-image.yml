@@ -7,7 +7,7 @@ on:
       - "sapmachine_version/*"
 
 env:
-  SAPMACHINE_VERSION: 11
+  SAPMACHINE_VERSION: 17
   IMAGE_NAME: lennartjuetteunic/sapcommerce-azuredevops-ci-image
 
 jobs:
