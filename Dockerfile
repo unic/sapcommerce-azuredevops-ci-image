@@ -1,4 +1,5 @@
-FROM lennartjuetteunic/sapcommerce-build-image:11-20221005132151
+ARG sapmachine_version
+FROM lennartjuetteunic/sapcommerce-build-image:$sapmachine_version
 
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]

@@ -2,9 +2,13 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - "main"
+      - "sapmachine_version/*"
+
+env:
+  SAPMACHINE_VERSION: 11
+  IMAGE_NAME: lennartjuetteunic/sapcommerce-azuredevops-ci-image
 
 jobs:
 
@@ -25,9 +29,18 @@ jobs:
       - name: Build the Docker image
         run: |
           TS=$(date +%Y%m%d%H%M%S)
-          IMAGE_NAME=lennartjuetteunic/sapcommerce-azuredevops-ci-image
-          docker build . --file Dockerfile --tag $IMAGE_NAME:latest
-          docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TS
-          docker push $IMAGE_NAME:$TS
-          docker push $IMAGE_NAME:latest
-
+          UNIQUE_TAG="${SAPMACHINE_VERSION}-${TS}"
+          
+          docker build . \
+            --file Dockerfile \
+            --tag $IMAGE_NAME:$UNIQUE_TAG \
+            --build-arg sapmachine_version=$SAPMACHINE_VERSION
+          docker push $IMAGE_NAME:$UNIQUE_TAG 
+          
+          docker tag $IMAGE_NAME:$UNIQUE_TAG  $IMAGE_NAME:$SAPMACHINE_VERSION
+          docker push $IMAGE_NAME:$SAPMACHINE_VERSION
+          
+          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            docker tag $IMAGE_NAME:$UNIQUE_TAG  $IMAGE_NAME:latest
+            docker push $IMAGE_NAME:latest
+          fi
