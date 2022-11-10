@@ -24,9 +24,11 @@ RUN curl -LsS https://aka.ms/InstallAzureCLIDeb | bash \
   && rm -rf /var/lib/apt/lists/*
 
 ## Install Maven
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    maven \
-  && rm -rf /var/lib/apt/lists/*
+RUN curl 'https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz' -o - |tar -zxv -C /opt \
+    && ln -s "$(find  /opt/ -iname 'apache-maven-*')" "/opt/apache-maven"
+
+ENV PATH="${PATH}:/opt/apache-maven/bin"
+
 
 ## Install Docker
 RUN apt-get update && apt-get install -y --no-install-recommends \
