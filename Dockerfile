@@ -1,5 +1,5 @@
 ARG sapmachine_version
-FROM lennartjuetteunic/sapcommerce-build-image:$sapmachine_version
+FROM sapmachine:$sapmachine_version
 
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -50,7 +50,7 @@ RUN curl -LsS https://aka.ms/InstallAzureCLIDeb | bash \
   && rm -rf /var/lib/apt/lists/*
 
 ## Install Maven
-RUN curl 'https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz' -o - |tar -zxv -C /opt \
+RUN curl 'https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.2/apache-maven-3.9.2-bin.tar.gz' -o - |tar -zxv -C /opt \
     && ln -s "$(find  /opt/ -iname 'apache-maven-*')" "/opt/apache-maven"
 
 ENV PATH="${PATH}:/opt/apache-maven/bin"
