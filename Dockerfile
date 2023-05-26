@@ -3,8 +3,34 @@ FROM lennartjuetteunic/sapcommerce-build-image:$sapmachine_version
 
 ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+
+# Install basic utilities & packages
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        wget \
+        curl \
+        procps \
+        xz-utils \
+        git \
+        ssh \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install mariadb for test that require a real DBMS
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        mariadb-server \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Google Chrome
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && curl -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && apt-get install -y --no-install-recommends ./chrome.deb\
+    && rm ./chrome.deb \
+    && rm -rf /var/lib/apt/lists/*
+ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
 ## Install Azure CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -45,6 +71,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ## Install basic tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
+  && rm -rf /var/lib/apt/lists/*
+
+## Install BATS
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bats \
   && rm -rf /var/lib/apt/lists/*
 
 ENV TARGETARCH=linux-x64
