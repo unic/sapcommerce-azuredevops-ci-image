@@ -78,6 +78,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bats \
   && rm -rf /var/lib/apt/lists/*
 
+## Install outdated libssl1.1 as dependency for azure agent
+RUN curl http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb -o /tmp/libssl.dpkg \
+  && dpkg -i /tmp/libssl.dpkg \
+  && rm /tmp/libssl.dpkg
+
+
+
 ENV TARGETARCH=linux-x64
 ENV JAVA_HOME_17_X64=$JAVA_HOME
 WORKDIR /azp
